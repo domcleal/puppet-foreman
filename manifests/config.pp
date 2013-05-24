@@ -1,4 +1,7 @@
 class foreman::config {
+
+  $scl_root = "/opt/rh/ruby193/root"
+
   Cron {
     require     => User[$foreman::user],
     user        => $foreman::user,
@@ -13,7 +16,7 @@ class foreman::config {
     content => template('foreman/settings.yaml.erb'),
   }
 
-  file {'/etc/foreman/settings.yaml':
+  file {"${scl_root}/etc/foreman/settings.yaml":
     source  => concat_output('foreman_settings'),
     require => Concat_build['foreman_settings'],
     notify  => Class['foreman::service'],
@@ -22,7 +25,7 @@ class foreman::config {
     mode    => '0640',
   }
 
-  file { '/etc/foreman/database.yml':
+  file { "${scl_root}/etc/foreman/database.yml":
     owner   => 'root',
     group   => $foreman::group,
     mode    => 640,
@@ -32,11 +35,11 @@ class foreman::config {
 
   case $::operatingsystem {
     Debian,Ubuntu: {
-      $init_config = '/etc/default/foreman'
+      $init_config = "${scl_root}/etc/default/foreman"
       $init_config_tmpl = 'foreman.default'
     }
     default: {
-      $init_config = '/etc/sysconfig/foreman'
+      $init_config = "${scl_root}/etc/sysconfig/foreman"
       $init_config_tmpl = 'foreman.sysconfig'
     }
   }
