@@ -37,7 +37,8 @@ class foreman::params {
   # this can be stable, rc, or nightly
   $repo        = 'rc'
   $railspath   = '/usr/share'
-  $app_root    = "${railspath}/foreman"
+  $sclroot     = '/opt/rh/ruby193/root'
+  $app_root    = "${sclroot}${railspath}/foreman"
   $user        = 'foreman'
   $group       = 'foreman'
   $environment = 'production'
@@ -58,15 +59,15 @@ class foreman::params {
       case $::operatingsystem {
         fedora: {
           if $::operatingsystemrelease >= 17 {
-            $puppet_basedir  = "/usr/share/ruby/vendor_ruby/puppet"
+            $puppet_basedir  = "${sclroot}/usr/share/ruby/vendor_ruby/puppet"
           } else {
-            $puppet_basedir  = "/usr/lib/ruby/site_ruby/${ruby_major}/puppet"
+            $puppet_basedir  = "${sclroot}/usr/lib/ruby/site_ruby/${ruby_major}/puppet"
           }
           $apache_conf_dir = '/etc/httpd/conf.d'
           $yumcode = "f${::operatingsystemrelease}"
         }
         default: {
-          $puppet_basedir  = "/usr/lib/ruby/site_ruby/${ruby_major}/puppet"
+          $puppet_basedir  = "${sclroot}/usr/lib/ruby/site_ruby/${ruby_major}/puppet"
           $apache_conf_dir = '/etc/httpd/conf.d'
           $osmajor = regsubst($::operatingsystemrelease, '\..*', '')
           $yumcode = "el${osmajor}"
@@ -82,7 +83,7 @@ class foreman::params {
       $apache_conf_dir = '/etc/apache2/conf.d/foreman.conf'
     }
   }
-  $puppet_home = '/var/lib/puppet'
+  $puppet_home = "${sclroot}/var/lib/puppet"
 
   # If CA is specified, remote Foreman host will be verified in reports/ENC scripts
   $client_ssl_ca   = "${puppet_home}/ssl/certs/ca.pem"
