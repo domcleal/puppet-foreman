@@ -22,10 +22,10 @@
   # Use puppet certificates for SSL
 
   SSLEngine On
-  SSLCertificateFile      /var/lib/puppet/ssl/certs/<%= fqdn %>.pem
-  SSLCertificateKeyFile   /var/lib/puppet/ssl/private_keys/<%= fqdn %>.pem
-  SSLCertificateChainFile /var/lib/puppet/ssl/certs/ca.pem
-  SSLCACertificateFile    /var/lib/puppet/ssl/certs/ca.pem
+  SSLCertificateFile      /opt/rh/ruby193/root/var/lib/puppet/ssl/certs/<%= fqdn %>.pem
+  SSLCertificateKeyFile   /opt/rh/ruby193/root/var/lib/puppet/ssl/private_keys/<%= fqdn %>.pem
+  SSLCertificateChainFile /opt/rh/ruby193/root/var/lib/puppet/ssl/certs/ca.pem
+  SSLCACertificateFile    /opt/rh/ruby193/root/var/lib/puppet/ssl/certs/ca.pem
   SSLVerifyClient         optional
   SSLOptions              +StdEnvVars
   SSLVerifyDepth          3
