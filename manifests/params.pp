@@ -67,7 +67,7 @@ class foreman::params {
           $yumcode = "f${::operatingsystemrelease}"
         }
         default: {
-          $puppet_basedir  = "${sclroot}/usr/lib/ruby/site_ruby/${ruby_major}/puppet"
+          $puppet_basedir  = "${sclroot}/usr/share/ruby/vendor_ruby/puppet"
           $apache_conf_dir = '/etc/httpd/conf.d'
           $osmajor = regsubst($::operatingsystemrelease, '\..*', '')
           $yumcode = "el${osmajor}"

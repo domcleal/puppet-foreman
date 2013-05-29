@@ -11,7 +11,7 @@ class foreman::config::enc (
 
   File { require => Class['::puppet::server::install'] }
 
-  file { '/etc/puppet/node.rb':
+  file { '/opt/rh/ruby193/root/etc/puppet/node.rb':
     content => template('foreman/external_node.rb.erb'),
     mode    => '0550',
     owner   => 'puppet',
