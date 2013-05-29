@@ -4,7 +4,7 @@ class foreman::database {
 
     class { $db_class: } ~>
     exec { "dbmigrate":
-      command     => "/opt/rh/ruby193/root/usr/bin/rake db:migrate",
+      command     => "/opt/rh/ruby193/root/usr/bin/rake db:migrate permissions:reset",
       cwd         => $foreman::app_root,
       user        => $foreman::user,
       environment => [
