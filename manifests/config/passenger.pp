@@ -29,6 +29,17 @@ class foreman::config::passenger(
   include apache
   include apache::mod::headers
 
+  # Ensure the Version module is loaded as we need it in the Foreman vhosts
+  # RedHat distros come with this enabled. Newer Debian and Ubuntu distros
+  # comes also with this enabled. Only old Debian and Ubuntu distros (squeeze,
+  # lucid, precise) needs hand-holding.
+  case $::lsbdistcodename {
+    'squeeze','lucid','precise': {
+      apache::mod { 'version': }
+    }
+    default: {}
+  }
+
   if $scl_prefix {
     class {'apache::mod::passenger':
       passenger_root => $passenger_root,
