@@ -13,11 +13,11 @@
     * Add version parameter to foreman::cli class to enable updates
 * Other changes and fixes:
     * Add environment from agent node YAML to ENC fact upload
-    * Use ENC node cache when fact upload fails (#492)
-    * Configure foreman-tasks plugin from Azure plugin class (#480)
+    * Use ENC node cache when fact upload fails (GH-492)
+    * Configure foreman-tasks plugin from Azure plugin class (GH-480)
     * Fix ordering of Apache service to happen inside foreman::service
     * Fix ordering of Puppet CA generation to Foreman startup (#17133)
-    * Fix restarting service on config changes with db_manage disabled (#502)
+    * Fix restarting service on config changes with db_manage disabled (GH-502)
     * Fix incorrect FreeIPA enrollment error on enrolled host
     * Permit extlib 1.x, tftp 2.x
     * Move advanced parameters into new documentation section (#16250)
