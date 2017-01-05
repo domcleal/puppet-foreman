@@ -1,11 +1,10 @@
-# = Foreman oVirt compute resource support
+# Foreman oVirt compute resource support
 #
 # Provides support for oVirt compute resources
 #
-# === Parameters:
-#
-# $version::  Package version to install, defaults to installed
-#             type:Optional[String]
+# @param version [Optional[String]]
+#                Package version to install, defaults to installed
+#                group: Foreman oVirt compute resource support
 #
 class foreman::compute::ovirt ( $version = 'installed' ) {
   package { 'foreman-ovirt':

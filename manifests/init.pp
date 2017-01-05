@@ -1,289 +1,355 @@
 # Manage your foreman server
 #
-# === Parameters:
+# @param admin_username            [String]
+#                                  Username for the initial admin user
 #
-# $admin_username::             Username for the initial admin user
-#                               type:String
+# @param admin_password            [String]
+#                                  Password of the initial admin user, default is randomly generated
 #
-# $admin_password::             Password of the initial admin user, default is randomly generated
-#                               type:String
+# @param admin_first_name          [Optional[String]]
+#                                  First name of the initial admin user
 #
-# $admin_first_name::           First name of the initial admin user
-#                               type:Optional[String]
+# @param admin_last_name           [Optional[String]]
+#                                  Last name of the initial admin user
 #
-# $admin_last_name::            Last name of the initial admin user
-#                               type:Optional[String]
+# @param admin_email               [Optional[String]]
+#                                  E-mail address of the initial admin user
 #
-# $admin_email::                E-mail address of the initial admin user
-#                               type:Optional[String]
+# @param db_manage                 [Boolean]
+#                                  if enabled, will install and configure the database server on this host
 #
-# $db_manage::                  if enabled, will install and configure the database server on this host
-#                               type:Boolean
+# @param db_type                   [Enum['mysql', 'postgresql', 'sqlite']]
+#                                  Database 'production' type
 #
-# $db_type::                    Database 'production' type
-#                               type:Enum['mysql', 'postgresql', 'sqlite']
+# @param email_delivery_method     [Optional[Enum['sendmail', 'smtp']]]
+#                                  Email delivery method
 #
-# $email_delivery_method::      Email delivery method
-#                               type:Optional[Enum['sendmail', 'smtp']]
+# @param email_smtp_address        [Optional[String]]
+#                                  SMTP server hostname, when delivery method is SMTP
 #
-# $email_smtp_address::         SMTP server hostname, when delivery method is SMTP
-#                               type:Optional[String]
+# @param email_smtp_port           [Integer[0, 65535]]
+#                                  SMTP port
 #
-# $email_smtp_port::            SMTP port
-#                               type:Integer[0, 65535]
+# @param email_smtp_domain         [Optional[String]]
+#                                  SMTP HELO domain
 #
-# $email_smtp_domain::          SMTP HELO domain
-#                               type:Optional[String]
+# @param email_smtp_authentication [Enum['none', 'plain', 'login', 'cram-md5']]
+#                                  SMTP authentication method
 #
-# $email_smtp_authentication::  SMTP authentication method
-#                               type:Enum['none', 'plain', 'login', 'cram-md5']
+# @param email_smtp_user_name      [Optional[String]]
+#                                  Username for SMTP server auth, if authentication is enabled
 #
-# $email_smtp_user_name::       Username for SMTP server auth, if authentication is enabled
-#                               type:Optional[String]
+# @param email_smtp_password       [Optional[String]]
+#                                  Password for SMTP server auth, if authentication is enabled
 #
-# $email_smtp_password::        Password for SMTP server auth, if authentication is enabled
-#                               type:Optional[String]
+# @param locations_enabled         [Boolean]
+#                                  Enable locations?
 #
-# $locations_enabled::          Enable locations?
-#                               type:Boolean
+# @param organizations_enabled     [Boolean]
+#                                  Enable organizations?
 #
-# $organizations_enabled::      Enable organizations?
-#                               type:Boolean
+# @param initial_organization      [Optional[String]]
+#                                  Name of an initial organization
 #
-# $initial_organization::       Name of an initial organization
-#                               type:Optional[String]
+# @param initial_location          [Optional[String]]
+#                                  Name of an initial location
 #
-# $initial_location::           Name of an initial location
-#                               type:Optional[String]
+# @param ipa_authentication        [Boolean]
+#                                  Enable configuration for external authentication via IPA
 #
-# $ipa_authentication::         Enable configuration for external authentication via IPA
-#                               type:Boolean
+# @param puppetrun                 [Boolean]
+#                                  Should Foreman be able to start Puppet runs on nodes
 #
-# $puppetrun::                  Should Foreman be able to start Puppet runs on nodes
-#                               type:Boolean
+# @param email_source              [String]
+#                                  Template to use for email configuration file
+#                                  group: Advanced parameters
 #
-# === Advanced parameters:
+# @param foreman_url               [Stdlib::HTTPUrl]
+#                                  URL on which foreman is going to run
+#                                  group: Advanced parameters
 #
-# $email_source::               Template to use for email configuration file
-#                               type:String
+# @param unattended                [Boolean]
+#                                  Should Foreman manage host provisioning as well
+#                                  group: Advanced parameters
 #
-# $foreman_url::                URL on which foreman is going to run
-#                               type:Stdlib::HTTPUrl
+# @param authentication            [Boolean]
+#                                  Enable user authentication. Initial credentials are set using admin_username
+#                                  and admin_password.
+#                                  group: Advanced parameters
 #
-# $unattended::                 Should Foreman manage host provisioning as well
-#                               type:Boolean
+# @param passenger                 [Boolean]
+#                                  Configure foreman via apache and passenger
+#                                  group: Advanced parameters
 #
-# $authentication::             Enable user authentication. Initial credentials are set using admin_username
-#                               and admin_password.
-#                               type:Boolean
+# @param passenger_ruby            [Optional[String]]
+#                                  Ruby interpreter used to run Foreman under Passenger
+#                                  group: Advanced parameters
 #
-# $passenger::                  Configure foreman via apache and passenger
-#                               type:Boolean
+# @param passenger_ruby_package    [Optional[String]]
+#                                  Package to install to provide Passenger libraries for the active Ruby
+#                                  interpreter
+#                                  group: Advanced parameters
 #
-# $passenger_ruby::             Ruby interpreter used to run Foreman under Passenger
-#                               type:Optional[String]
+# @param plugin_prefix             [String]
+#                                  String which is prepended to the plugin package names
+#                                  group: Advanced parameters
 #
-# $passenger_ruby_package::     Package to install to provide Passenger libraries for the active Ruby
-#                               interpreter
-#                               type:Optional[String]
+# @param use_vhost                 [Boolean]
+#                                  Enclose apache configuration in VirtualHost tags
+#                                  group: Advanced parameters
 #
-# $plugin_prefix::              String which is prepended to the plugin package names
-#                               type:String
-#
-# $use_vhost::                  Enclose apache configuration in VirtualHost tags
-#                               type:Boolean
-#
-# $servername::                 Server name of the VirtualHost in the webserver
-#                               type:String
-#
-# $serveraliases::              Server aliases of the VirtualHost in the webserver
-#                               type:Array[String]
-#
-# $ssl::                        Enable and set require_ssl in Foreman settings (note: requires passenger, SSL does not apply to kickstarts)
-#                               type:Boolean
-#
-# $custom_repo::                No need to change anything here by default
-#                               if set to true, no repo will be added by this module, letting you to
-#                               set it to some custom location.
-#                               type:Boolean
-#
-# $repo::                       This can be stable, nightly or a specific version i.e. 1.7
-#                               type:String
-#
-# $configure_epel_repo::        If disabled the EPEL repo will not be configured on Red Hat family systems.
-#                               type:Boolean
-#
-# $configure_scl_repo::         If disabled the SCL repo will not be configured on Red Hat clone systems.
-#                               (Currently only installs repos for CentOS and Scientific)
-#                               type:Boolean
-#
-# $selinux::                    When undef, foreman-selinux will be installed if SELinux is enabled
-#                               setting to false/true will override this check (e.g. set to false on 1.1)
-#                               type:Optional[Boolean]
-#
-# $gpgcheck::                   Turn on/off gpg check in repo files (effective only on RedHat family systems)
-#                               type:Boolean
-#
-# $version::                    Foreman package version, it's passed to ensure parameter of package resource
-#                               can be set to specific version number, 'latest', 'present' etc.
-#                               type:String
-#
-# $plugin_version::             Foreman plugins package version, it's passed to ensure parameter of package resource
-#                               can be set to 'installed', 'latest', 'present' only
-#                               type:String
-#
-# $db_adapter::                 Database 'production' adapter
-#                               type:Optional[Enum['mysql2', 'postgresql', 'sqlite3']]
-#
-# $db_host::                    Database 'production' host
-#                               type:Optional[String]
-#
-# $db_port::                    Database 'production' port
-#                               type:Optional[Integer[0, 65635]]
-#
-# $db_database::                Database 'production' database (e.g. foreman)
-#                               type:Optional[String]
-#
-# $db_username::                Database 'production' user (e.g. foreman)
-#                               type:Optional[String]
-#
-# $db_password::                Database 'production' password, default is randomly generated
-#                               type:Optional[String]
-#
-# $db_sslmode::                 Database 'production' ssl mode
-#                               type:Optional[String]
-#
-# $db_pool::                    Database 'production' size of connection pool
-#                               type:Integer[0]
-#
-# $db_manage_rake::             if enabled, will run rake jobs, which depend on the database
-#                               type:Boolean
-#
-# $app_root::                   Name of foreman root directory
-#                               type:Stdlib::Absolutepath
-#
-# $manage_user::                Controls whether foreman module will manage the user on the system.
-#                               type:Boolean
-#
-# $user::                       User under which foreman will run
-#                               type:String
-#
-# $group::                      Primary group for the Foreman user
-#                               type:String
-#
-# $rails_env::                  Rails environment of foreman
-#                               type:String
-#
-# $user_groups::                Additional groups for the Foreman user
-#                               type:Array[String]
-#
-# $puppet_home::                Puppet home directory
-#                               type:Stdlib::Absolutepath
-#
-# $puppet_ssldir::              Puppet SSL directory
-#                               type:Stdlib::Absolutepath
-#
-# $passenger_interface::        Defines which network interface passenger should listen on, undef means all interfaces
-#                               type:Optional[String]
-#
-# $passenger_prestart::         Pre-start the first passenger worker instance process during httpd start.
-#                               type:Boolean
-#
-# $passenger_min_instances::    Minimum passenger worker instances to keep when application is idle.
-#                               type:Integer[0]
-#
-# $passenger_start_timeout::    Amount of seconds to wait for Ruby application boot.
-#                               type:Integer[0]
-#
-# $vhost_priority::             Defines Apache vhost priority for the Foreman vhost conf file.
-#                               type:String
-#
-# $server_port::                Defines Apache port for HTTP requests
-#                               type:Integer[0, 65535]
-#
-# $server_ssl_port::            Defines Apache port for HTTPS reqquests
-#                               type:Integer[0, 65535]
-#
-# $server_ssl_ca::              Defines Apache mod_ssl SSLCACertificateFile setting in Foreman vhost conf file.
-#                               type:Stdlib::Absolutepath
-#
-# $server_ssl_chain::           Defines Apache mod_ssl SSLCertificateChainFile setting in Foreman vhost conf file.
-#                               type:Stdlib::Absolutepath
-#
-# $server_ssl_cert::            Defines Apache mod_ssl SSLCertificateFile setting in Foreman vhost conf file.
-#                               type:Stdlib::Absolutepath
-#
-# $server_ssl_certs_dir::       Defines Apache mod_ssl SSLCACertificatePath setting in Foreman vhost conf file.
-#                               type:Variant[String[0], Stdlib::Absolutepath]
-#
-# $server_ssl_key::             Defines Apache mod_ssl SSLCertificateKeyFile setting in Foreman vhost conf file.
-#                               type:Stdlib::Absolutepath
-#
-# $server_ssl_crl::             Defines the Apache mod_ssl SSLCARevocationFile setting in Foreman vhost conf file.
-#                               type:Optional[Variant[String[0], Stdlib::Absolutepath]]
-#
-# $client_ssl_ca::              Defines the SSL CA used to communicate with Foreman Proxies
-#                               type:Stdlib::Absolutepath
-#
-# $client_ssl_cert::            Defines the SSL certificate used to communicate with Foreman Proxies
-#                               type:Stdlib::Absolutepath
-#
-# $client_ssl_key::             Defines the SSL private key used to communicate with Foreman Proxies
-#                               type:Stdlib::Absolutepath
-#
-# $keepalive::                  Enable KeepAlive setting of Apache?
-#                               type:Boolean
-#
-# $max_keepalive_requests::     MaxKeepAliveRequests setting of Apache
-#                               (Number of requests allowed on a persistent connection)
-#                               type:Integer[0]
-#
-# $keepalive_timeout::          KeepAliveTimeout setting of Apache
-#                               (Seconds the server will wait for subsequent requests on a persistent connection)
-#                               type:Integer[0]
-#
-# $oauth_active::               Enable OAuth authentication for REST API
-#                               type:Boolean
-#
-# $oauth_map_users::            Should Foreman use the foreman_user header to identify API user?
-#                               type:Boolean
-#
-# $oauth_consumer_key::         OAuth consumer key
-#                               type:String
-#
-# $oauth_consumer_secret::      OAuth consumer secret
-#                               type:String
-#
-# $http_keytab::                Path to keytab to be used for Kerberos authentication on the WebUI
-#                               type:Stdlib::Absolutepath
-#
-# $pam_service::                PAM service used for host-based access control in IPA
-#                               type:String
-#
-# $ipa_manage_sssd::            If ipa_authentication is true, should the installer manage SSSD? You can disable it
-#                               if you use another module for SSSD configuration
-#                               type:Boolean
-#
-# $websockets_encrypt::         Whether to encrypt websocket connections
-#                               type:Boolean
-#
-# $websockets_ssl_key::         SSL key file to use when encrypting websocket connections
-#                               type:Stdlib::Absolutepath
-#
-# $websockets_ssl_cert::        SSL certificate file to use when encrypting websocket connections
-#                               type:Stdlib::Absolutepath
-#
-# $logging_level::              Logging level of the Foreman application
-#                               type:Enum['debug', 'info', 'warn', 'error', 'fatal']
-#
-# $loggers::                    Enable or disable specific loggers, e.g. {"sql" => true}
-#                               type:Hash[String, Boolean]
-#
-# $email_config_method::        Configure email settings in database (1.14+) or configuration file (deprecated)
-#                               type:Enum['database', 'file']
-#
-# $email_conf::                 Email configuration file under /etc/foreman
-#                               type:String
+# @param servername                [String]
+#                                  Server name of the VirtualHost in the webserver
+#                                  group: Advanced parameters
+#
+# @param serveraliases             [Array[String]]
+#                                  Server aliases of the VirtualHost in the webserver
+#                                  group: Advanced parameters
+#
+# @param ssl                       [Boolean]
+#                                  Enable and set require_ssl in Foreman settings (note: requires passenger, SSL does not apply to kickstarts)
+#                                  group: Advanced parameters
+#
+# @param custom_repo               [Boolean]
+#                                  No need to change anything here by default
+#                                  if set to true, no repo will be added by this module, letting you to
+#                                  set it to some custom location.
+#                                  group: Advanced parameters
+#
+# @param repo                      [String]
+#                                  This can be stable, nightly or a specific version i.e. 1.7
+#                                  group: Advanced parameters
+#
+# @param configure_epel_repo       [Boolean]
+#                                  If disabled the EPEL repo will not be configured on Red Hat family systems.
+#                                  group: Advanced parameters
+#
+# @param configure_scl_repo        [Boolean]
+#                                  If disabled the SCL repo will not be configured on Red Hat clone systems.
+#                                  (Currently only installs repos for CentOS and Scientific)
+#                                  group: Advanced parameters
+#
+# @param selinux                   [Optional[Boolean]]
+#                                  When undef, foreman-selinux will be installed if SELinux is enabled
+#                                  setting to false/true will override this check (e.g. set to false on 1.1)
+#                                  group: Advanced parameters
+#
+# @param gpgcheck                  [Boolean]
+#                                  Turn on/off gpg check in repo files (effective only on RedHat family systems)
+#                                  group: Advanced parameters
+#
+# @param version                   [String]
+#                                  Foreman package version, it's passed to ensure parameter of package resource
+#                                  can be set to specific version number, 'latest', 'present' etc.
+#                                  group: Advanced parameters
+#
+# @param plugin_version            [String]
+#                                  Foreman plugins package version, it's passed to ensure parameter of package resource
+#                                  can be set to 'installed', 'latest', 'present' only
+#                                  group: Advanced parameters
+#
+# @param db_adapter                [Optional[Enum['mysql2', 'postgresql', 'sqlite3']]]
+#                                  Database 'production' adapter
+#                                  group: Advanced parameters
+#
+# @param db_host                   [Optional[String]]
+#                                  Database 'production' host
+#                                  group: Advanced parameters
+#
+# @param db_port                   [Optional[Integer[0, 65635]]]
+#                                  Database 'production' port
+#                                  group: Advanced parameters
+#
+# @param db_database               [Optional[String]]
+#                                  Database 'production' database (e.g. foreman)
+#                                  group: Advanced parameters
+#
+# @param db_username               [Optional[String]]
+#                                  Database 'production' user (e.g. foreman)
+#                                  group: Advanced parameters
+#
+# @param db_password               [Optional[String]]
+#                                  Database 'production' password, default is randomly generated
+#                                  group: Advanced parameters
+#
+# @param db_sslmode                [Optional[String]]
+#                                  Database 'production' ssl mode
+#                                  group: Advanced parameters
+#
+# @param db_pool                   [Integer[0]]
+#                                  Database 'production' size of connection pool
+#                                  group: Advanced parameters
+#
+# @param db_manage_rake            [Boolean]
+#                                  if enabled, will run rake jobs, which depend on the database
+#                                  group: Advanced parameters
+#
+# @param app_root                  [Stdlib::Absolutepath]
+#                                  Name of foreman root directory
+#                                  group: Advanced parameters
+#
+# @param manage_user               [Boolean]
+#                                  Controls whether foreman module will manage the user on the system.
+#                                  group: Advanced parameters
+#
+# @param user                      [String]
+#                                  User under which foreman will run
+#                                  group: Advanced parameters
+#
+# @param group                     [String]
+#                                  Primary group for the Foreman user
+#                                  group: Advanced parameters
+#
+# @param rails_env                 [String]
+#                                  Rails environment of foreman
+#                                  group: Advanced parameters
+#
+# @param user_groups               [Array[String]]
+#                                  Additional groups for the Foreman user
+#                                  group: Advanced parameters
+#
+# @param puppet_home               [Stdlib::Absolutepath]
+#                                  Puppet home directory
+#                                  group: Advanced parameters
+#
+# @param puppet_ssldir             [Stdlib::Absolutepath]
+#                                  Puppet SSL directory
+#                                  group: Advanced parameters
+#
+# @param passenger_interface       [Optional[String]]
+#                                  Defines which network interface passenger should listen on, undef means all interfaces
+#                                  group: Advanced parameters
+#
+# @param passenger_prestart        [Boolean]
+#                                  Pre-start the first passenger worker instance process during httpd start.
+#                                  group: Advanced parameters
+#
+# @param passenger_min_instances   [Integer[0]]
+#                                  Minimum passenger worker instances to keep when application is idle.
+#                                  group: Advanced parameters
+#
+# @param passenger_start_timeout   [Integer[0]]
+#                                  Amount of seconds to wait for Ruby application boot.
+#                                  group: Advanced parameters
+#
+# @param vhost_priority            [String]
+#                                  Defines Apache vhost priority for the Foreman vhost conf file.
+#                                  group: Advanced parameters
+#
+# @param server_port               [Integer[0, 65535]]
+#                                  Defines Apache port for HTTP requests
+#                                  group: Advanced parameters
+#
+# @param server_ssl_port           [Integer[0, 65535]]
+#                                  Defines Apache port for HTTPS reqquests
+#                                  group: Advanced parameters
+#
+# @param server_ssl_ca             [Stdlib::Absolutepath]
+#                                  Defines Apache mod_ssl SSLCACertificateFile setting in Foreman vhost conf file.
+#                                  group: Advanced parameters
+#
+# @param server_ssl_chain          [Stdlib::Absolutepath]
+#                                  Defines Apache mod_ssl SSLCertificateChainFile setting in Foreman vhost conf file.
+#                                  group: Advanced parameters
+#
+# @param server_ssl_cert           [Stdlib::Absolutepath]
+#                                  Defines Apache mod_ssl SSLCertificateFile setting in Foreman vhost conf file.
+#                                  group: Advanced parameters
+#
+# @param server_ssl_certs_dir      [Variant[String[0], Stdlib::Absolutepath]]
+#                                  Defines Apache mod_ssl SSLCACertificatePath setting in Foreman vhost conf file.
+#                                  group: Advanced parameters
+#
+# @param server_ssl_key            [Stdlib::Absolutepath]
+#                                  Defines Apache mod_ssl SSLCertificateKeyFile setting in Foreman vhost conf file.
+#                                  group: Advanced parameters
+#
+# @param server_ssl_crl            [Optional[Variant[String[0], Stdlib::Absolutepath]]]
+#                                  Defines the Apache mod_ssl SSLCARevocationFile setting in Foreman vhost conf file.
+#                                  group: Advanced parameters
+#
+# @param client_ssl_ca             [Stdlib::Absolutepath]
+#                                  Defines the SSL CA used to communicate with Foreman Proxies
+#                                  group: Advanced parameters
+#
+# @param client_ssl_cert           [Stdlib::Absolutepath]
+#                                  Defines the SSL certificate used to communicate with Foreman Proxies
+#                                  group: Advanced parameters
+#
+# @param client_ssl_key            [Stdlib::Absolutepath]
+#                                  Defines the SSL private key used to communicate with Foreman Proxies
+#                                  group: Advanced parameters
+#
+# @param keepalive                 [Boolean]
+#                                  Enable KeepAlive setting of Apache?
+#                                  group: Advanced parameters
+#
+# @param max_keepalive_requests    [Integer[0]]
+#                                  MaxKeepAliveRequests setting of Apache
+#                                  (Number of requests allowed on a persistent connection)
+#                                  group: Advanced parameters
+#
+# @param keepalive_timeout         [Integer[0]]
+#                                  KeepAliveTimeout setting of Apache
+#                                  (Seconds the server will wait for subsequent requests on a persistent connection)
+#                                  group: Advanced parameters
+#
+# @param oauth_active              [Boolean]
+#                                  Enable OAuth authentication for REST API
+#                                  group: Advanced parameters
+#
+# @param oauth_map_users           [Boolean]
+#                                  Should Foreman use the foreman_user header to identify API user?
+#                                  group: Advanced parameters
+#
+# @param oauth_consumer_key        [String]
+#                                  OAuth consumer key
+#                                  group: Advanced parameters
+#
+# @param oauth_consumer_secret     [String]
+#                                  OAuth consumer secret
+#                                  group: Advanced parameters
+#
+# @param http_keytab               [Stdlib::Absolutepath]
+#                                  Path to keytab to be used for Kerberos authentication on the WebUI
+#                                  group: Advanced parameters
+#
+# @param pam_service               [String]
+#                                  PAM service used for host-based access control in IPA
+#                                  group: Advanced parameters
+#
+# @param ipa_manage_sssd           [Boolean]
+#                                  If ipa_authentication is true, should the installer manage SSSD? You can disable it
+#                                  if you use another module for SSSD configuration
+#                                  group: Advanced parameters
+#
+# @param websockets_encrypt        [Boolean]
+#                                  Whether to encrypt websocket connections
+#                                  group: Advanced parameters
+#
+# @param websockets_ssl_key        [Stdlib::Absolutepath]
+#                                  SSL key file to use when encrypting websocket connections
+#                                  group: Advanced parameters
+#
+# @param websockets_ssl_cert       [Stdlib::Absolutepath]
+#                                  SSL certificate file to use when encrypting websocket connections
+#                                  group: Advanced parameters
+#
+# @param logging_level             [Enum['debug', 'info', 'warn', 'error', 'fatal']]
+#                                  Logging level of the Foreman application
+#                                  group: Advanced parameters
+#
+# @param loggers                   [Hash[String, Boolean]]
+#                                  Enable or disable specific loggers, e.g. {"sql" => true}
+#                                  group: Advanced parameters
+#
+# @param email_config_method       [Enum['database', 'file']]
+#                                  Configure email settings in database (1.14+) or configuration file (deprecated)
+#                                  group: Advanced parameters
+#
+# @param email_conf                [String]
+#                                  Email configuration file under /etc/foreman
+#                                  group: Advanced parameters
 #
 class foreman (
   $foreman_url               = $::foreman::params::foreman_url,

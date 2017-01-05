@@ -1,35 +1,36 @@
-# = Foreman command line interface
+# Foreman command line interface
 #
 # This class installs the Hammer command line interface (CLI).
 #
-# === Parameters:
+# @param foreman_url          [Optional[Stdlib::HTTPUrl]]
+#                             URL on which Foreman runs
 #
-# $foreman_url::        URL on which Foreman runs
-#                       type:Optional[Stdlib::HTTPUrl]
+# @param username             [Optional[String]]
+#                             Username for authentication
 #
-# $username::           Username for authentication
-#                       type:Optional[String]
+# @param password             [Optional[String]]
+#                             Password for authentication
 #
-# $password::           Password for authentication
-#                       type:Optional[String]
+# @param manage_root_config   [Boolean]
+#                             Whether to manage /root/.hammer configuration.
+#                             group: Advanced parameters
 #
-# === Advanced parameters:
+# @param refresh_cache        [Boolean]
+#                             Check API documentation cache status on each request
+#                             group: Advanced parameters
 #
-# $manage_root_config::   Whether to manage /root/.hammer configuration.
-#                         type:Boolean
+# @param request_timeout      [Integer[-1]]
+#                             API request timeout, set -1 for infinity
+#                             group: Advanced parameters
 #
-# $refresh_cache::        Check API documentation cache status on each request
-#                         type:Boolean
+# @param hammer_plugin_prefix [String]
+#                             Hammer plugin package prefix based normally on platform
+#                             group: Advanced parameters
 #
-# $request_timeout::      API request timeout, set -1 for infinity
-#                         type:Integer[-1]
-#
-# $hammer_plugin_prefix:: Hammer plugin package prefix based normally on platform
-#                         type:String
-#
-# $version::              foreman-cli package version, it's passed to ensure parameter of package resource
-#                         can be set to specific version number, 'latest', 'present' etc.
-#                         type:String
+# @param version              [String]
+#                             foreman-cli package version, it's passed to ensure parameter of package resource
+#                             can be set to specific version number, 'latest', 'present' etc.
+#                             group: Advanced parameters
 #
 class foreman::cli (
   $foreman_url          = $::foreman::cli::params::foreman_url,

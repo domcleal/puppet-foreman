@@ -1,20 +1,22 @@
-# = Foreman Memcache plugin
+# Foreman Memcache plugin
 #
 # This class installs the memcache plugin and configuration file
 #
-# === Parameters:
+# @param hosts      [Array[String]]
+#                   an array of hosts running memcache
+#                   group: Foreman Memcache plugin
 #
-# $hosts::      an array of hosts running memcache
-#               type:Array[String]
+# @param expires_in [Integer[0]]
+#                   global default for key TTL in seconds
+#                   group: Foreman Memcache plugin
 #
-# $expires_in:: global default for key TTL in seconds
-#               type:Integer[0]
+# @param namespace  [String]
+#                   prepends each key with this value to provide simple namespacing
+#                   group: Foreman Memcache plugin
 #
-# $namespace::  prepends each key with this value to provide simple namespacing
-#               type:String
-#
-# $compress::   will gzip-compress values larger than 1K
-#               type:Boolean
+# @param compress   [Boolean]
+#                   will gzip-compress values larger than 1K
+#                   group: Foreman Memcache plugin
 #
 class foreman::plugin::memcache (
   $hosts      = $::foreman::plugin::memcache::params::hosts,

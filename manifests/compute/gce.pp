@@ -1,11 +1,10 @@
-# = Foreman Google Compute Engine compute resource support
+# Foreman Google Compute Engine compute resource support
 #
 # Provides support for Google Compute Engine compute resources
 #
-# === Parameters:
-#
-# $version::  Package version to install, defaults to installed
-#             type:Optional[String]
+# @param version [Optional[String]]
+#                Package version to install, defaults to installed
+#                group: Foreman Google Compute Engine compute resource support
 #
 class foreman::compute::gce ( $version = 'installed' ) {
   package { 'foreman-gce':

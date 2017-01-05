@@ -1,21 +1,23 @@
-# = Foreman Discovery plugin
+# Foreman Discovery plugin
 #
 # This class installs discovery plugin and images
 #
-# === Parameters:
+# @param install_images [Boolean]
+#                       should the installer download and setup discovery images
+#                       for you? the average size is few hundreds of MB
+#                       group: Foreman Discovery plugin
 #
-# $install_images::  should the installer download and setup discovery images
-#                    for you? the average size is few hundreds of MB
-#                    type:Boolean
+# @param tftp_root      [Stdlib::Absolutepath]
+#                       TFTP root to install image into
+#                       group: Foreman Discovery plugin
 #
-# $tftp_root::       TFTP root to install image into
-#                    type:Stdlib::Absolutepath
+# @param source_url     [Stdlib::HTTPUrl]
+#                       source URL to download from
+#                       group: Foreman Discovery plugin
 #
-# $source_url::      source URL to download from
-#                    type:Stdlib::HTTPUrl
-#
-# $image_name::      tarball with images
-#                    type:String
+# @param image_name     [String]
+#                       tarball with images
+#                       group: Foreman Discovery plugin
 #
 class foreman::plugin::discovery (
   $install_images = $::foreman::plugin::discovery::params::install_images,

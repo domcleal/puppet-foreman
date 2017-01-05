@@ -1,11 +1,10 @@
-# = Foreman LibVirt compute resource support
+# Foreman LibVirt compute resource support
 #
 # Provides support for Libvirt compute resources
 #
-# === Parameters:
-#
-# $version::  Package version to install, defaults to installed
-#             type:Optional[String]
+# @param version [Optional[String]]
+#                Package version to install, defaults to installed
+#                group: Foreman LibVirt compute resource support
 #
 class foreman::compute::libvirt ( $version = 'installed' ) {
   package { 'foreman-libvirt':

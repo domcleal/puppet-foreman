@@ -1,26 +1,27 @@
-# = foreman_* providers support
+# foreman_* providers support
 #
 # Installs dependencies to use the foreman_* types and providers.
 #
 # Default parameters should point to the latest packages required for
 # the current version of the providers.
 #
-# === Parameters:
+# @param oauth                   [Boolean]
+#                                Install oauth dependency
 #
-# $oauth::                    Install oauth dependency
-#                             type:boolean
+# @param oauth_package           [String]
+#                                Name of oauth package
 #
-# $oauth_package::            Name of oauth package
+# @param json                    [Boolean]
+#                                Install json dependency, not required on Ruby 1.9 or higher
 #
-# $json::                     Install json dependency, not required on Ruby 1.9 or higher
-#                             type:boolean
+# @param json_package            [String]
+#                                Name of json package
 #
-# $json_package::             Name of json package
+# @param apipie_bindings         [Boolean]
+#                                Install apipie-bindings dependency
 #
-# $apipie_bindings::          Install apipie-bindings dependency
-#                             type:boolean
-#
-# $apipie_bindings_package::  Name of apipie-bindings package
+# @param apipie_bindings_package [String]
+#                                Name of apipie-bindings package
 #
 class foreman::providers(
   $oauth                   = $::foreman::providers::params::oauth,

@@ -1,14 +1,14 @@
-# = Foreman Tasks
+# Foreman Tasks
 #
 # Installs the foreman-tasks plugin
 #
-# === Parameters:
+# @param package [String]
+#                Package name to install, use ruby193-rubygem-foreman-tasks on Foreman 1.8/1.9 on EL
+#                group: Foreman Tasks
 #
-# $package:: Package name to install, use ruby193-rubygem-foreman-tasks on Foreman 1.8/1.9 on EL
-#            type:String
-#
-# $service:: Service name
-#            type:String
+# @param service [String]
+#                Service name
+#                group: Foreman Tasks
 #
 class foreman::plugin::tasks(
   $package = $foreman::plugin::tasks::params::package,

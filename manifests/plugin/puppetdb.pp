@@ -1,17 +1,18 @@
-# = PuppetDB Foreman plugin
+# PuppetDB Foreman plugin
 #
 # Installs the puppetdb_foreman plugin
 #
-# === Parameters:
+# @param package           [String]
+#                          Package name to install, use ruby193-rubygem-puppetdb_foreman on Foreman 1.8/1.9 on EL
+#                          group: PuppetDB Foreman plugin
 #
-# $package:: Package name to install, use ruby193-rubygem-puppetdb_foreman on Foreman 1.8/1.9 on EL
-#            type:String
+# @param address           [Stdlib::HTTPUrl]
+#                          Address of puppetdb API. Defaults to 'https://localhost:8081/v2/commands'
+#                          group: PuppetDB Foreman plugin
 #
-# $address:: Address of puppetdb API. Defaults to 'https://localhost:8081/v2/commands'
-#            type:Stdlib::HTTPUrl
-#
-# $dashboard_address:: Address of puppetdb dashboard. Defaults to 'http://localhost:8080/dashboard'
-#                      type:Stdlib::HTTPUrl
+# @param dashboard_address [Stdlib::HTTPUrl]
+#                          Address of puppetdb dashboard. Defaults to 'http://localhost:8080/dashboard'
+#                          group: PuppetDB Foreman plugin
 #
 class foreman::plugin::puppetdb (
   $package           = $foreman::plugin::puppetdb::params::package,
